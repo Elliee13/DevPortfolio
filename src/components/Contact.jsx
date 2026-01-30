@@ -13,6 +13,7 @@ const Contact = () => {
     name: '',
     email: '',
     message: '',
+    website: '',
   });
   const [submitState, setSubmitState] = useState({
     status: 'idle',
@@ -89,7 +90,7 @@ const Contact = () => {
     setSubmitState({ status: 'submitting', message: '' });
 
     try {
-      const response = await fetch('https://formspree.io/f/xpqqqnbg', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -99,19 +100,24 @@ const Contact = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Submission failed');
+        const data = await response.json().catch(() => ({}));
+        if (response.status === 429) {
+          throw new Error('Rate limited');
+        }
+        throw new Error(data?.error || 'Submission failed');
       }
 
       setSubmitState({
         status: 'success',
         message: "Thanks! I'll get back to you soon.",
       });
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', message: '', website: '' });
     } catch (error) {
-      setSubmitState({
-        status: 'error',
-        message: 'Something went wrong. Please try again.',
-      });
+      const message =
+        error?.message === 'Rate limited'
+          ? 'Please wait a bit before sending another message.'
+          : 'Something went wrong. Please try again.';
+      setSubmitState({ status: 'error', message });
     }
   };
 
@@ -198,6 +204,20 @@ const Contact = () => {
                 className="w-full px-6 py-4 border border-light-gray bg-soft-white text-charcoal font-body text-lg focus:outline-none focus:border-almost-black transition-colors duration-500"
               />
             </div>
+            <div className="hidden">
+              <label className="sr-only" htmlFor="website">
+                Website
+              </label>
+              <input
+                id="website"
+                type="text"
+                name="website"
+                value={formData.website}
+                onChange={handleChange}
+                tabIndex="-1"
+                autoComplete="off"
+              />
+            </div>
             <div>
               <textarea
                 name="message"
@@ -218,14 +238,16 @@ const Contact = () => {
               {submitState.status === 'submitting' ? 'Sending...' : 'Send Message'}
             </button>
             {submitState.message ? (
-              <p
-                className={`font-body text-base ${
-                  submitState.status === 'error' ? 'text-red-600' : 'text-muted-olive'
+              <div
+                className={`font-body text-base px-4 py-3 rounded border ${
+                  submitState.status === 'error'
+                    ? 'border-red-200 text-red-700 bg-red-50'
+                    : 'border-muted-olive/30 text-muted-olive bg-muted-olive/10'
                 }`}
                 aria-live="polite"
               >
                 {submitState.message}
-              </p>
+              </div>
             ) : null}
           </form>
         </div>
