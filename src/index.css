@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+/* -------------------------------------------
+   THEME TOKENS (Tailwind v4 @theme)
+-------------------------------------------- */
+@theme {
+  /* Core palette (yours) */
+  --color-soft-white: #f7f7f5;
+  --color-almost-black: #0e0e0e;
+  --color-charcoal: #4b4b4b;
+  --color-light-gray: #dadada;
+  --color-muted-olive: #9c9b6a;
+
+  /* Brutal accents (new) */
+  --color-brutal-lime: #00ff66;
+  --color-brutal-yellow: #ffe600;
+  --color-brutal-pink: #ff2bd6;
+
+  /* Brutal primitives (new) */
+  --border-brutal: 3px;
+  --shadow-brutal-x: 10px;
+  --shadow-brutal-y: 10px;
+
+  /* Fonts (yours) */
+  --font-family-display: "Neue Montreal", sans-serif;
+  --font-family-body: "Inter", sans-serif;
+  --font-family-accent: "Satoshi", sans-serif;
+}
+
+/* -------------------------------------------
+   BASE
+-------------------------------------------- */
+@layer base {
+  * {
+    border-color: var(--color-light-gray);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-soft-white);
+    color: var(--color-almost-black);
+    font-family: var(--font-family-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    position: relative;
+    opacity: 1 !important;
+  }
+
+  /* Keep noise subtle + not above everything */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 2;
+    mix-blend-mode: multiply;
+  }
+
+  /* Cursor rules */
+  @media (pointer: fine) {
+    * {
+      cursor: none !important;
+    }
+
+    a,
+    button,
+    input,
+    textarea,
+    select {
+      cursor: none !important;
+    }
+  }
+
+  @media (pointer: coarse) {
+    * {
+      cursor: auto !important;
+    }
+  }
+}
+
+/* -------------------------------------------
+   UTILITIES
+-------------------------------------------- */
+@layer utilities {
+  /* Fonts */
+  .font-display {
+    font-family: var(--font-family-display);
+    letter-spacing: -0.02em;
+  }
+
+  .font-body {
+    font-family: var(--font-family-body);
+  }
+
+  .font-accent {
+    font-family: var(--font-family-accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* Brutal typography */
+  .font-display-brutal {
+    font-family: var(--font-family-display);
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+  }
+
+  /* Brutal border primitive */
+  .brutal-border {
+    border: var(--border-brutal) solid var(--color-almost-black);
+  }
+
+  /* Brutal stamp block (offset misregistration) */
+  .brutal-stamp {
+    position: relative;
+    background: #fff;
+    border: var(--border-brutal) solid var(--color-almost-black);
+    isolation: isolate;
+  }
+
+  .brutal-stamp::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translate(var(--shadow-brutal-x), var(--shadow-brutal-y));
+    background: var(--color-brutal-lime);
+    border: var(--border-brutal) solid var(--color-almost-black);
+    z-index: -1;
+  }
+
+  /* Sharp underline bar */
+  .brutal-bar {
+    height: 6px;
+    width: 96px;
+    background: var(--color-almost-black);
+  }
+
+  /* Marker highlight behind text */
+  .brutal-highlight {
+    position: relative;
+    display: inline-block;
+    z-index: 0;
+  }
+
+  .brutal-highlight::after {
+    content: "";
+    position: absolute;
+    left: -0.08em;
+    right: -0.08em;
+    bottom: 0.08em;
+    height: 0.55em;
+    background: var(--color-brutal-yellow);
+    z-index: -1;
+    transform: rotate(-1deg);
+  }
+
+  /* Press / stamp interaction */
+  .brutal-press {
+    transition: transform 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+  }
+
+  .brutal-press:hover {
+    transform: rotate(-0.6deg) scale(0.992);
+  }
+
+  /* Optional: brutal "cut" (hard divider line) */
+  .brutal-cut {
+    height: 3px;
+    width: 100%;
+    background: var(--color-almost-black);
+  }
+}
+
+/* -------------------------------------------
+   Cursor quality improvements (yours)
+-------------------------------------------- */
+.cursor-follower {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  width: 1rem;
+  height: 1rem;
+}
+
+.cursor-follower > div {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
