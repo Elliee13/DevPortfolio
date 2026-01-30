@@ -10,7 +10,6 @@ const roles = [
     description:
       "Building scalable web applications with modern technologies. From frontend inte10aces to backend architectures, I craft robust digital solutions.",
     logos: [
-      { src: "/logos/html.svg", alt: "HTML", tilt: -10, x: 2 },
       { src: "/logos/react.svg", alt: "React", tilt: 6, x: 2 },
       { src: "/logos/tailwind.svg", alt: "Tailwind CSS", tilt: -6, x: 12 },
       { src: "/logos/ts.svg", alt: "TypeScript", tilt: 10, x: 10 },
