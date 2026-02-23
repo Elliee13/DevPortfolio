@@ -122,7 +122,6 @@ const Contact = () => {
   };
 
   const socialLinks = [
-    { name: 'LinkedIn', url: 'https://www.linkedin.com/in/john-ellemeleck-p-austria-6b2a85302/?skipRedirect=true' },
     { name: 'GitHub', url: 'https://github.com/Elliee13' },
   ];
 
